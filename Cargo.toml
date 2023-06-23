@@ -1,0 +1,22 @@
+[package]
+name = "thunder"
+version = "0.0.1"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+specs = "0.19.0"
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = "*"
+env_logger = "0.10.0"
+log = { version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
+futures-util = { version = "0.3.28", default-features = false, features = ["sink", "std"] }
+futures-channel = "0.3.28"
+tonic = "0.9.2"
+protobuf = "3.2.0"
+prost = "0.11.9"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[build-dependencies]
+tonic-build =  "0.9.2"
