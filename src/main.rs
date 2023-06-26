@@ -1,16 +1,26 @@
 use std::{
-    collections::HashMap,
     env,
     io::Error as IoError,
-    sync::{Mutex},
 };
 use tokio::net::{TcpListener};
 use log::{info,error};
 use tonic::{transport::Server};
 use thunder::{hello_server};
+use actix_web::{App, HttpServer};
+use dotenv::dotenv;
 
 // Custom use
 pub mod socket;
+pub mod router {
+    pub mod http_router;
+    pub mod socket_router;
+    pub mod singleton_test;
+}
+pub mod persistence {
+    pub mod users {
+        pub mod user_data;
+    }
+}
 mod grpc {
     pub mod thunder {
         pub mod test {
@@ -18,9 +28,28 @@ mod grpc {
         }
     }
 }
+pub mod database {
+    pub mod mongo {
+        pub mod users;
+    }
+    pub mod redis {
+        pub mod connect;
+    }
+}
+pub mod utils {
+    pub mod sha;
+    pub mod jwt;
+}
+pub mod structs {
+    pub mod users_struct;
+}
+use router::http_router::{
+    join,
+    login,
+    asd,
+};
 use socket::{
     handle_connection,
-    TotalSocket,
 };
 use grpc::thunder::test::hello_service::{
     HelloService, thunder,
@@ -31,23 +60,42 @@ async fn main() -> Result<(), IoError> {
     // logger level setting
     env::set_var("RUST_LOG", "info");
     env_logger::init();
+    // dotenv using
+    dotenv().ok();
 
-    // socket server start
+    // Socket server start
     let addr = env::args().nth(1).unwrap_or_else(|| "0.0.0.0:7777".to_string());
-    let total_socket = TotalSocket::new(Mutex::new(HashMap::new()));
     let try_socket = TcpListener::bind(&addr).await;
     let listener = try_socket.expect("Failed to bind");
     tokio::spawn(async move {
         info!("socket server start : {}", addr);
         // socket main loop
         while let Ok((stream, addr)) = listener.accept().await {
-            tokio::spawn(handle_connection(total_socket.clone(),stream, addr));
+            tokio::spawn(handle_connection(stream, addr));
         }
     });
 
+    // HTTP server start
+    let http_addr = env::args().nth(2).unwrap_or_else(|| "0.0.0.0:7778".to_string());
+    let server = HttpServer::new(|| {
+        App::new()
+            .service(join)
+            .service(login)
+            .service(asd)
+    })
+    .bind(&http_addr)?
+    .run();
+    tokio::spawn(async move {
+        info!("HTTP server start : {}", http_addr);
+        if let Err(err) = server.await {
+            error!("HTTP server error: {}", err);
+        }
+    });
+
+
     // gRPC server start
     let hello_service = HelloService::default();
-    let addr = "[::1]:7778".parse().unwrap();
+    let addr = "[::1]:7779".parse().unwrap();
     let hello_server = hello_server::HelloServer::new(hello_service);
     tokio::spawn(async move {
         info!("gRPC server start : {}", addr);

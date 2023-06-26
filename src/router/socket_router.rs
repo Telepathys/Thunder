@@ -1,13 +1,12 @@
 use std::{
     collections::HashMap,
     net::SocketAddr,
-    sync::{Arc, Mutex},
+    sync::{Mutex},
 };
 use tokio_tungstenite::tungstenite::protocol::Message;
-use futures_channel::mpsc::{unbounded, UnboundedSender};
+use futures_channel::mpsc::{unbounded};
 use log::{info};
 use serde_json::{Value};
-use crate::socket::TotalSocket;
 
 pub async fn router(msg: Message, socket: SocketAddr) {
     let msg = msg.to_text().unwrap();
@@ -15,17 +14,7 @@ pub async fn router(msg: Message, socket: SocketAddr) {
     if let Some(data) = value.as_object().unwrap().iter().next() {
         let router = data.0;
         match router.as_str() {
-            "login" => {
-                let total_socket = TotalSocket::new(Mutex::new(HashMap::new()));
-                let (tx, rx) = unbounded();
-                total_socket.clone().lock().unwrap().insert(socket, tx);
-                let peers = total_socket.lock().unwrap();
-                let broadcast_recipients = peers.iter().filter(|(peer_addr, _)| peer_addr != &&socket).map(|(_, ws_sink)| ws_sink);
-                info!("z");
-                for recp in broadcast_recipients {
-                    info!("ㅁㅁㅁㅁ");
-                    recp.unbounded_send(msg.into()).unwrap();
-                }
+            "caht" => {
                 info!("login : {}", data.0);
             }
             _ => {
