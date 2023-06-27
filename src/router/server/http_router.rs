@@ -1,7 +1,6 @@
 
 use actix_web::{get, post, HttpResponse, Responder};
 use serde_json::json;
-use crate::router::singleton_test::ARRAY;
 use crate::utils::jwt::{
     create_jwt,
 };
@@ -11,9 +10,6 @@ use crate::database::mongo::user::users::{
     user_login,
     find_by_name,
 };
-use crate::database::redis::test::test::{
-    fetch_an_integer
-};
 use crate::structs::users_struct::{
     Join,
     Login,
@@ -21,34 +17,22 @@ use crate::structs::users_struct::{
     User,
 };
 
-#[get("/")]
-pub async fn index() -> impl Responder {
-    ARRAY.lock().unwrap().push(1);
-    HttpResponse::Ok().body(ARRAY.lock().unwrap().len().to_string())
-}
-
-#[get("/test")]
-pub async fn test() -> impl Responder {
-    ARRAY.lock().unwrap().push(2);
-    HttpResponse::Ok().body(ARRAY.lock().unwrap().len().to_string())
-}
-
 #[get("/asd")]
 pub async fn asd() -> impl Responder {
     // let uuid = Uuid::new_v4();
     // insert_document().await;
     // let get_user = find_by_name().await;
 
-    let result = fetch_an_integer().await;
-    match result {
-        Ok(value) => {
-            println!("Fetched value: {}", value);
-        }
-        Err(error) => {
-            eprintln!("Failed to fetch value: {}", error);
-        }
-    }
-    HttpResponse::Ok().body("get_user".to_string())
+    // let result = fetch_an_integer().await;
+    // match result {
+    //     Ok(value) => {
+    //         println!("Fetched value: {}", value);
+    //     }
+    //     Err(error) => {
+    //         eprintln!("Failed to fetch value: {}", error);
+    //     }
+    // }
+    HttpResponse::Ok().body("get_user1".to_string())
 }
 
 

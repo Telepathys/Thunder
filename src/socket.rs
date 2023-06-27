@@ -8,12 +8,16 @@ use futures_util::stream::SplitSink;
 use futures_util::{future, pin_mut, stream::TryStreamExt, StreamExt};
 use tokio::net::{TcpStream};
 use log::{info,error};
-use crate::persistence::users::user_data::{add_user_socket, delete_user_socket, get_user_socket};
+use crate::persistence::users::user_data::{add_user_socket, delete_user_socket};
+use crate::router::server::socket_router::router;
 use tokio_tungstenite::{tungstenite::handshake::client::Request,tungstenite::Message};
 use tokio_tungstenite::tungstenite::Error as TungsteniteError;
 use tokio_tungstenite::WebSocketStream;
 use crate::utils::jwt::{
     verify_token,
+};
+use crate::structs::users_struct::{
+    UserSocket
 };
 
 
@@ -41,48 +45,44 @@ pub async fn handle_connection(stream: TcpStream, socket: SocketAddr) {
     }
     
     if let Some(token) = query_map.get("token") {
-        println!("토큰: {}", token);
         let result = verify_token(token);
         match result {
             Ok(value) => {
-                let uuid = value.get("uuid");
+                let uid = value.get("uuid");
                 let id = value.get("id");
                 let name = value.get("name");
-                println!("uuid: {}", uuid.unwrap());
-                println!("id: {}", id.unwrap());
-                println!("name: {}", name.unwrap());
                 let (_tx, rx) = unbounded();
                 
-                add_user_socket(socket,_tx);
-            
-                let broadcast_incoming = incoming.try_for_each(|msg| {
-                    // tokio::spawn(async move {
-                    //     router(msg,socket).await;
-                    // });
-            
-                    // We want to broadcast the message to everyone except ourselves.
-                    let sockets = get_user_socket();
-                    let broadcast_recipients =
-                    sockets.iter().filter(|(peer_addr, _)| peer_addr != &&socket).map(|(_, ws_sink)| ws_sink);
-            
-                    for recp in broadcast_recipients {
-                        recp.unbounded_send(msg.clone()).unwrap();
+                add_user_socket(
+                    uid.unwrap().to_string(),
+                    UserSocket {
+                        id: id.unwrap().to_string(),
+                        name: name.unwrap().to_string(),
+                        socket: socket,
+                        tx: _tx,
                     }
+                );
+
+                let broadcast_incoming = incoming.try_for_each(|msg| {
+                    let uid_clone = uid.unwrap().to_string();
+                    tokio::spawn(async move {
+                        if !msg.is_empty() {
+                            router(uid_clone,msg).await;
+                        }
+                    });
             
                     future::ok(())
                 });
+
             
                 let receive_from_others = rx.map(Ok).forward(outgoing);
-            
                 pin_mut!(broadcast_incoming, receive_from_others);
                 future::select(broadcast_incoming, receive_from_others).await;
-            
-                delete_user_socket(socket)
+                delete_user_socket(uid.unwrap().to_string())
             }
             Err(error) => {
                 error!("{}", error);
                 tokio::spawn(async move {
-                    // 에러 코드를 전송하는 함수를 호출합니다.
                     let mut ws_sink = outgoing.sink_map_err(|err| {
                         std::io::Error::new(std::io::ErrorKind::Other, err)
                     }).into_inner();

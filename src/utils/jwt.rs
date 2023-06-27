@@ -20,7 +20,7 @@ pub fn create_jwt(token_input: TokenInput) -> String {
         FixedOffset::east_opt(secs).expect("FixedOffset::east out of bounds")
     };
     let now = Utc::now().with_timezone(&kst_offset);
-    let expiration = now + Duration::minutes(1);
+    let expiration = now + Duration::hours(24);
     claims.insert("exp", expiration.timestamp().to_string());
 
     let token = claims.sign_with_key(&key).unwrap();
@@ -44,8 +44,8 @@ pub fn verify_token(token: &str) -> Result<BTreeMap<String, String>, String> {
             FixedOffset::east_opt(secs).expect("FixedOffset::east out of bounds")
         };
         let now = Utc::now().with_timezone(&kst_offset).timestamp();
-        info!("expiration: {}", expiration);
-        info!("now: {}", now);
+        // info!("expiration: {}", expiration);
+        // info!("now: {}", now);
         if now >= expiration {
             error!("Token has expired");
             return Err("Token has expired".to_string());

@@ -12,9 +12,13 @@ use dotenv::dotenv;
 // Custom use
 pub mod socket;
 pub mod router {
-    pub mod http_router;
-    pub mod socket_router;
-    pub mod singleton_test;
+    pub mod server{
+        pub mod http_router;
+        pub mod socket_router;
+    }
+    pub mod service {
+        pub mod message_router;
+    }
 }
 pub mod persistence {
     pub mod users {
@@ -40,6 +44,9 @@ pub mod database {
         pub mod test {
             pub mod test;
         }
+        pub mod socket {
+            pub mod socket_hash;
+        }
     }
 }
 pub mod utils {
@@ -48,8 +55,9 @@ pub mod utils {
 }
 pub mod structs {
     pub mod users_struct;
+    pub mod message_struct;
 }
-use router::http_router::{
+use router::server::http_router::{
     join,
     login,
     asd,
