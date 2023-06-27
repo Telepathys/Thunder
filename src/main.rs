@@ -30,10 +30,16 @@ mod grpc {
 }
 pub mod database {
     pub mod mongo {
-        pub mod users;
+        pub mod user{
+            pub mod users;
+        }
+        pub mod connect;
     }
     pub mod redis {
         pub mod connect;
+        pub mod test {
+            pub mod test;
+        }
     }
 }
 pub mod utils {

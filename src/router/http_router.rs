@@ -6,12 +6,12 @@ use crate::utils::jwt::{
     create_jwt,
 };
 use log::{info,error};
-use crate::database::mongo::users::{
+use crate::database::mongo::user::users::{
     user_join,
     user_login,
     find_by_name,
 };
-use crate::database::redis::connect::{
+use crate::database::redis::test::test::{
     fetch_an_integer
 };
 use crate::structs::users_struct::{
@@ -38,7 +38,16 @@ pub async fn asd() -> impl Responder {
     // let uuid = Uuid::new_v4();
     // insert_document().await;
     // let get_user = find_by_name().await;
-    // fetch_an_integer().unwrap();
+
+    let result = fetch_an_integer().await;
+    match result {
+        Ok(value) => {
+            println!("Fetched value: {}", value);
+        }
+        Err(error) => {
+            eprintln!("Failed to fetch value: {}", error);
+        }
+    }
     HttpResponse::Ok().body("get_user".to_string())
 }
 
@@ -101,5 +110,6 @@ pub async fn login(req_body: String) -> impl Responder {
         token: token,
     };
 
+    info!("{}이 로그인에 성공하였습니다.", user.name);
     HttpResponse::Ok().json(user)
 }

@@ -1,5 +1,4 @@
 use serde::{Deserialize,Serialize};
-use std::fmt;
 
 #[derive(Deserialize)]
 pub struct Join {
