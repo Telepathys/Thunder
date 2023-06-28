@@ -1,6 +1,6 @@
 extern crate mongodb;
 use mongodb::{bson::{doc, Document}};
-use crate::structs::users_struct::{
+use crate::game::components::user::user_component::{
     Join,
     Login,
 };

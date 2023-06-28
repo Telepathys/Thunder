@@ -52,10 +52,24 @@ pub mod database {
 pub mod utils {
     pub mod sha;
     pub mod jwt;
+    pub mod etc;
 }
-pub mod structs {
-    pub mod users_struct;
-    pub mod message_struct;
+pub mod game {
+    pub mod components {
+        pub mod user {
+            pub mod user_component;
+        }
+        pub mod message {
+            pub mod server_message_component;
+            pub mod whisper_message_component;
+        }
+    }
+    pub mod systems {
+        pub mod message {
+            pub mod server_message_system;
+            pub mod whisper_message_system;
+        }
+    }
 }
 use router::server::http_router::{
     join,

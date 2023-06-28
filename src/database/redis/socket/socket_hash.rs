@@ -1,6 +1,6 @@
 use log::info;
 use redis::Commands;
-use crate::{database::redis::connect::connect_redis, structs::users_struct::UserData};
+use crate::{database::redis::connect::connect_redis, game::components::user::user_component::UserData};
 
 pub async fn add_connecting_uuid_to_redis(user_data: UserData) -> redis::RedisResult<isize> {
     let mut con: redis::Connection = connect_redis()?;

@@ -4,7 +4,7 @@ use std::{
 };
 use lazy_static::lazy_static;
 use log::{info};
-use crate::structs::users_struct::{
+use crate::game::components::user::user_component::{
     UserSocket, UserData,
 };
 use crate::database::redis::socket::socket_hash::{

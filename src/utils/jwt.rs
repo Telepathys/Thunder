@@ -2,7 +2,7 @@ use hmac::{Hmac, Mac};
 use jwt::{SignWithKey, VerifyWithKey};
 use sha2::Sha256;
 use std::collections::BTreeMap;
-use crate::structs::users_struct::{
+use crate::game::components::user::user_component::{
     TokenInput,
 };
 use chrono::{Utc, FixedOffset, Duration};

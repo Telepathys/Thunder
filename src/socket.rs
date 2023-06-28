@@ -16,7 +16,7 @@ use tokio_tungstenite::WebSocketStream;
 use crate::utils::jwt::{
     verify_token,
 };
-use crate::structs::users_struct::{
+use crate::game::components::user::user_component::{
     UserSocket
 };
 

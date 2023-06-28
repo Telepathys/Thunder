@@ -10,7 +10,7 @@ use crate::database::mongo::user::users::{
     user_login,
     find_by_name,
 };
-use crate::structs::users_struct::{
+use crate::game::components::user::user_component::{
     Join,
     Login,
     TokenInput,
