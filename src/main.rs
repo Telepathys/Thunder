@@ -123,7 +123,7 @@ async fn main() -> Result<(), IoError> {
 
     // gRPC server start
     let hello_service = HelloService::default();
-    let addr = "[::1]:7779".parse().unwrap();
+    let addr = "0.0.0.0:7779".parse().unwrap();
     let hello_server = hello_server::HelloServer::new(hello_service);
     tokio::spawn(async move {
         info!("gRPC server start : {}", addr);
