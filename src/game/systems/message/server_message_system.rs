@@ -6,7 +6,7 @@ use crate::game::components::message::server_message_component::{
     ServerMessage,
     ServerMessageSendTo,
 };
-use crate::persistence::users::user_data::get_user_socket;
+use crate::game::memory::user::user_memory::get_user_socket;
 use std::sync::{Arc,Mutex};
 
 struct ServerMessageEcsEngine {

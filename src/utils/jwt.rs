@@ -6,7 +6,7 @@ use crate::game::components::user::user_component::{
     TokenInput,
 };
 use chrono::{Utc, FixedOffset, Duration};
-use log::{info,error};
+use log::{error};
 
 pub fn create_jwt(token_input: TokenInput) -> String {
     let key: Hmac<Sha256> = Hmac::new_from_slice(b"some-secret").unwrap();

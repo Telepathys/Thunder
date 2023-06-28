@@ -6,7 +6,7 @@ use crate::game::components::message::whisper_message_component::{
     WhisperMessage,
     WhisperMessageSendTo,
 };
-use crate::persistence::users::user_data::get_user_socket;
+use crate::game::memory::user::user_memory::get_user_socket;
 use std::sync::{Arc,Mutex};
 
 struct WhisperMessageEcsEngine {

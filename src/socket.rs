@@ -8,7 +8,7 @@ use futures_util::stream::SplitSink;
 use futures_util::{future, pin_mut, stream::TryStreamExt, StreamExt};
 use tokio::net::{TcpStream};
 use log::{info,error};
-use crate::persistence::users::user_data::{add_user_socket, delete_user_socket};
+use crate::game::memory::user::user_memory::{add_user_socket, delete_user_socket};
 use crate::router::server::socket_router::router;
 use tokio_tungstenite::{tungstenite::handshake::client::Request,tungstenite::Message};
 use tokio_tungstenite::tungstenite::Error as TungsteniteError;

@@ -20,11 +20,6 @@ pub mod router {
         pub mod message_router;
     }
 }
-pub mod persistence {
-    pub mod users {
-        pub mod user_data;
-    }
-}
 mod grpc {
     pub mod thunder {
         pub mod test {
@@ -52,7 +47,6 @@ pub mod database {
 pub mod utils {
     pub mod sha;
     pub mod jwt;
-    pub mod etc;
 }
 pub mod game {
     pub mod components {
@@ -68,6 +62,11 @@ pub mod game {
         pub mod message {
             pub mod server_message_system;
             pub mod whisper_message_system;
+        }
+    }
+    pub mod memory {
+        pub mod user {
+            pub mod user_memory;
         }
     }
 }

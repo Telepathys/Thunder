@@ -3,7 +3,7 @@ use std::{
     collections::HashMap,
 };
 use lazy_static::lazy_static;
-use log::{info};
+use log::error;
 use crate::game::components::user::user_component::{
     UserSocket, UserData,
 };
@@ -22,18 +22,24 @@ pub fn add_user_socket(uuid: String, user_socket: UserSocket) {
     let name = user_socket.name.clone();
     USER_SOCKETS.lock().unwrap().insert(uuid.clone(), user_socket);
     tokio::spawn(async move {
-        add_connecting_uuid_to_redis(UserData{
-            uuid: uuid.clone(),
-            id: id,
-            name: name,
-        }).await;
+        if let Err(err) = add_connecting_uuid_to_redis(
+            UserData{
+                uuid: uuid.clone(),
+                id: id,
+                name: name,
+            }
+        ).await {
+            error!("{}", err);
+        }
     });
 }
 
 pub fn delete_user_socket(uuid: String) {
     USER_SOCKETS.lock().unwrap().remove(&uuid.clone());
     tokio::spawn(async move {
-        remove_connecting_uuid_to_redis(&uuid).await;
+        if let Err(err) = remove_connecting_uuid_to_redis(&uuid).await {
+            error!("{}", err);
+        };
     });
 }
 
