@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 use futures_channel::mpsc::UnboundedSender;
 use tokio_tungstenite::tungstenite::Message;
-use crate::database::redis::socket::socket_hash::get_my_info;
+use crate::database::mongo::user::users::find_by_uuid;
+use crate::database::redis::socket::socket_hash::{get_my_info, check_online_user};
 use crate::game::components::message::whisper_message_component::{
     WhisperMessage,
     WhisperMessageSendTo,
@@ -9,6 +10,8 @@ use crate::game::components::message::whisper_message_component::{
 use crate::game::enums::core_enum::MessageType;
 use crate::game::memory::user::user_memory::get_user_socket;
 use std::sync::{Arc,Mutex};
+
+use super::system_message_system::system_message_send;
 
 struct WhisperMessageEcsEngine {
     target_users: Arc<Mutex<HashMap<String, UnboundedSender<Message>>>>,
@@ -40,10 +43,21 @@ pub fn whisper_message_send(
     send_uid: String,
     msg : Message,
 ) {
+    
     let whisper_message_ecs_engine = Arc::new(WhisperMessageEcsEngine::new());
     let msg = msg.to_text().unwrap();
     let data: WhisperMessage = serde_json::from_str(msg).unwrap();
     let uid = data.whisper_message_send.uid.clone();
+
+    if !check_online_user(&uid).unwrap() {
+        tokio::spawn(async move {
+            let target_user_info = find_by_uuid(&uid).await;
+            let arget_username = target_user_info.get("name").unwrap().to_string().trim_matches('"').to_string();
+            system_message_send(send_uid, format!("{} is not online.", arget_username));
+        });
+        return;
+    }
+
     let message = data.whisper_message_send.message.clone();
     let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
