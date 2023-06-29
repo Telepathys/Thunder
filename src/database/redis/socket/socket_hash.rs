@@ -1,4 +1,3 @@
-use log::info;
 use redis::Commands;
 use crate::{database::redis::connect::connect_redis, game::components::user::user_component::UserData};
 
