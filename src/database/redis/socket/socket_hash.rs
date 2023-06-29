@@ -13,7 +13,6 @@ pub async fn add_connecting_uuid_to_redis(user_data: UserData) -> redis::RedisRe
 
 pub async fn remove_connecting_uuid_to_redis(uuid: &String) -> redis::RedisResult<Vec<String>> {
     let mut con: redis::Connection = connect_redis()?;
-    info!("test: {}",uuid);
     con.srem("socket_list", uuid)?;
     con.del(uuid)?;
     con.smembers("socket_list")
