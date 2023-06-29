@@ -8,8 +8,8 @@ use futures_util::stream::SplitSink;
 use futures_util::{future, pin_mut, stream::TryStreamExt, StreamExt};
 use tokio::net::{TcpStream};
 use log::{info,error};
+use crate::database::redis::connect::redis_publish;
 use crate::game::memory::user::user_memory::{add_user_socket, delete_user_socket};
-use crate::router::server::socket_router::router;
 use tokio_tungstenite::{tungstenite::handshake::client::Request,tungstenite::Message};
 use tokio_tungstenite::tungstenite::Error as TungsteniteError;
 use tokio_tungstenite::WebSocketStream;
@@ -63,12 +63,10 @@ pub async fn handle_connection(stream: TcpStream, socket: SocketAddr) {
                     }
                 );
 
-                let broadcast_incoming = incoming.try_for_each(|msg| {
+                let broadcast_incoming = incoming.try_for_each(|msg: Message| {
                     let uid_clone = uid.unwrap().to_string();
                     tokio::spawn(async move {
-                        if !msg.is_empty() {
-                            router(uid_clone,msg).await;
-                        }
+                        redis_publish(uid_clone, msg).await;
                     });
             
                     future::ok(())

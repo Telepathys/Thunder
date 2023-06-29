@@ -35,7 +35,7 @@ impl WhisperMessageEcsEngine {
     }
 }
 
-pub async fn whisper_message_send(
+pub fn whisper_message_send(
     send_uid: String,
     msg : Message,
 ) {
@@ -44,7 +44,7 @@ pub async fn whisper_message_send(
     let data: WhisperMessage = serde_json::from_str(msg).unwrap();
     let uid = data.whisper_message_send.uid.clone();
     let message = data.whisper_message_send.message.clone();
-    let sender_info = get_my_info(&send_uid).await.unwrap();
+    let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
     let whisper_message_send_to = WhisperMessageSendTo {
         uid: send_uid.clone(),

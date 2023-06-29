@@ -24,7 +24,7 @@ pub async fn get_connecting_uuid_list() -> redis::RedisResult<Vec<String>> {
     con.smembers("socket_list")
 }
 
-pub async fn get_my_info(uuid: &String) -> redis::RedisResult<Vec<(String, String)>> {
+pub fn get_my_info(uuid: &String) -> redis::RedisResult<Vec<(String, String)>> {
     let mut con: redis::Connection = connect_redis()?;
     con.hgetall(uuid)
 }

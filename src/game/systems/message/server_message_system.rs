@@ -35,7 +35,7 @@ impl ServerMessageEcsEngine {
     }
 }
 
-pub async fn server_message_send(
+pub fn server_message_send(
     send_uid: String,
     msg : Message,
 ) {
@@ -43,7 +43,7 @@ pub async fn server_message_send(
     let msg = msg.to_text().unwrap();
     let data: ServerMessage = serde_json::from_str(msg).unwrap();
     let message = data.server_message_send.message.clone();
-    let sender_info = get_my_info(&send_uid).await.unwrap();
+    let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
 
     let server_message_send_to = ServerMessageSendTo {

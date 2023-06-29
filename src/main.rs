@@ -2,6 +2,7 @@ use std::{
     env,
     io::Error as IoError,
 };
+use database::redis::connect::{redis_subscribe};
 use tokio::net::{TcpListener};
 use log::{info,error};
 use tonic::{transport::Server};
@@ -56,6 +57,9 @@ pub mod game {
         pub mod message {
             pub mod server_message_component;
             pub mod whisper_message_component;
+        }
+        pub mod redis {
+            pub mod redis_component;
         }
     }
     pub mod systems {
@@ -133,6 +137,13 @@ async fn main() -> Result<(), IoError> {
         {
             error!("gRPC server error : {}", err);
         }
+    });
+
+    // redis channel subscribe
+    tokio::spawn(async move {
+        info!("redis channel subscribe start");
+        redis_subscribe();
+        info!("redis channel subscribe end");
     });
 
     tokio::signal::ctrl_c().await.unwrap();
