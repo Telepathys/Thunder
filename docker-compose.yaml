@@ -7,3 +7,9 @@ services:
       - "7777:7777"
       - "7778:7778"
       - "7779:7779"
+    depends_on:
+      - redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"

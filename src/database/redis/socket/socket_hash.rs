@@ -28,3 +28,8 @@ pub fn get_my_info(uuid: &String) -> redis::RedisResult<Vec<(String, String)>> {
     let mut con: redis::Connection = connect_redis()?;
     con.hgetall(uuid)
 }
+
+pub fn check_online_user(uuid: &String) -> redis::RedisResult<bool> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.sismember("socket_list", &uuid)
+}

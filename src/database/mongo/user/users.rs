@@ -39,6 +39,19 @@ pub async fn find_by_name(name: &str) -> Document {
     }
 }
 
+pub async fn find_by_uuid(uuid: &str) -> Document {
+    let coll = connect_mongodb(COLL_NAME).await;
+    let filter = doc! {"uuid": uuid};
+    let result = coll.find_one(Some(filter), None).await.unwrap();
+    match result {
+        Some(doc) => return doc,
+        None => {
+            println!("No document found!");
+            return doc! {}
+        },
+    }
+}
+
 pub async fn user_login(login: Login) -> Document {
     let coll = connect_mongodb(COLL_NAME).await;
     let filter = doc! {

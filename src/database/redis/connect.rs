@@ -10,6 +10,8 @@ use crate::{game::components::redis::redis_component::{
 
 pub fn connect_redis() -> redis::RedisResult<redis::Connection> {
     let client = redis::Client::open(env::var("REDIS_URL").expect("Error: REDIS_URL not found"))?;
+    // docker-compose
+    // let client = redis::Client::open("redis://redis:6379")?;
     client.get_connection()
 }
 
