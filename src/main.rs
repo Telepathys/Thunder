@@ -114,7 +114,7 @@ async fn main() -> Result<(), IoError> {
     dotenv().ok();
 
     // Socket server start
-    let addr = env::args().nth(1).unwrap_or_else(|| "0.0.0.0:8777".to_string());
+    let addr = env::args().nth(1).unwrap_or_else(|| "0.0.0.0:7777".to_string());
     let try_socket = TcpListener::bind(&addr).await;
     let listener = try_socket.expect("Failed to bind");
     tokio::spawn(async move {
@@ -126,7 +126,7 @@ async fn main() -> Result<(), IoError> {
     });
 
     // HTTP server start
-    let http_addr = env::args().nth(2).unwrap_or_else(|| "0.0.0.0:8778".to_string());
+    let http_addr = env::args().nth(2).unwrap_or_else(|| "0.0.0.0:7778".to_string());
     let server = HttpServer::new(|| {
         App::new()
             .service(join)
@@ -145,7 +145,7 @@ async fn main() -> Result<(), IoError> {
 
     // gRPC server start
     let hello_service = HelloService::default();
-    let addr = "0.0.0.0:8779".parse().unwrap();
+    let addr = "0.0.0.0:7779".parse().unwrap();
     let hello_server = hello_server::HelloServer::new(hello_service);
     tokio::spawn(async move {
         info!("gRPC server start : {}", addr);
