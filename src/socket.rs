@@ -7,9 +7,9 @@ use futures_util::SinkExt;
 use futures_util::stream::SplitSink;
 use futures_util::{future, pin_mut, stream::TryStreamExt, StreamExt};
 use tokio::net::{TcpStream};
-use log::{info,error};
+use log::{error};
 use crate::database::redis::connect::redis_publish;
-use crate::game::memory::user::user_memory::{add_user_socket, delete_user_socket};
+use crate::game::memory::user::user_memory::{add_user_socket, init_for_disconnect_user};
 use tokio_tungstenite::{tungstenite::handshake::client::Request,tungstenite::Message};
 use tokio_tungstenite::tungstenite::Error as TungsteniteError;
 use tokio_tungstenite::WebSocketStream;
@@ -22,7 +22,6 @@ use crate::game::components::user::user_component::{
 
 
 pub async fn handle_connection(stream: TcpStream, socket: SocketAddr) {
-    info!("Incoming TCP connection from: {}", socket);
     let mut uri = None;
     let ws_stream: tokio_tungstenite::WebSocketStream<TcpStream> = tokio_tungstenite::accept_hdr_async(stream, |req: &Request, res| {
         uri = Some(req.uri().clone());
@@ -76,7 +75,7 @@ pub async fn handle_connection(stream: TcpStream, socket: SocketAddr) {
                 let receive_from_others = rx.map(Ok).forward(outgoing);
                 pin_mut!(broadcast_incoming, receive_from_others);
                 future::select(broadcast_incoming, receive_from_others).await;
-                delete_user_socket(uid.unwrap().to_string())
+                init_for_disconnect_user(uid.unwrap().to_string())
             }
             Err(error) => {
                 error!("{}", error);

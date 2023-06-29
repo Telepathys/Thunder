@@ -8,6 +8,9 @@ use crate::game::components::message::server_message_component::{
 };
 use crate::game::memory::user::user_memory::get_user_socket;
 use std::sync::{Arc,Mutex};
+use crate::game::enums::core_enum::{
+    MessageType
+};
 
 struct ServerMessageEcsEngine {
     target_users: Arc<Mutex<HashMap<String, UnboundedSender<Message>>>>,
@@ -47,6 +50,7 @@ pub fn server_message_send(
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
 
     let server_message_send_to = ServerMessageSendTo {
+        message_type: MessageType::ServerMessage,
         uid: send_uid.clone(),
         username: username,
         message: message.clone(),

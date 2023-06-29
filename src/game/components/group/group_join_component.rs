@@ -1,21 +1,23 @@
 use serde::{Deserialize,Serialize};
+use crate::game::enums::core_enum::{
+    MessageType
+};
 
-use crate::game::enums::core_enum::MessageType;
 
 #[derive(Debug, Deserialize)]
-pub struct WhisperMessage {
-    pub whisper_message_send: WhisperMessageSend,
+pub struct GroupJoin {
+    pub group_join: GroupJoinData,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct WhisperMessageSend {
-    pub uid: String,
-    pub message: String,
+pub struct GroupJoinData {
+    pub group_name: String,
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct WhisperMessageSendTo {
+pub struct ResponseGroupJoin {
     pub message_type: MessageType,
+    pub group_key: String,
     pub uid: String,
     pub username: String,
     pub message: String,

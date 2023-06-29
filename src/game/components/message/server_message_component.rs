@@ -1,4 +1,7 @@
 use serde::{Deserialize,Serialize};
+use crate::game::enums::core_enum::{
+    MessageType
+};
 
 #[derive(Debug, Deserialize)]
 pub struct ServerMessage {
@@ -10,8 +13,9 @@ pub struct ServerMessageSend {
     pub message: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Deserialize, Serialize)]
 pub struct ServerMessageSendTo {
+    pub message_type: MessageType,
     pub uid: String,
     pub username: String,
     pub message: String,

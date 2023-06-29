@@ -6,6 +6,7 @@ use crate::game::components::message::whisper_message_component::{
     WhisperMessage,
     WhisperMessageSendTo,
 };
+use crate::game::enums::core_enum::MessageType;
 use crate::game::memory::user::user_memory::get_user_socket;
 use std::sync::{Arc,Mutex};
 
@@ -47,6 +48,7 @@ pub fn whisper_message_send(
     let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
     let whisper_message_send_to = WhisperMessageSendTo {
+        message_type: MessageType::WhisperMessage,
         uid: send_uid.clone(),
         username: username,
         message: message.clone(),

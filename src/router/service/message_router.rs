@@ -6,6 +6,9 @@ use crate::game::systems::message::{
     },
     server_message_system::{
         server_message_send
+    },
+    group_message_system::{
+        group_message_send
     }
 };
 
@@ -16,6 +19,9 @@ pub fn message_router(send_uid: String, service: &str, msg: Message) {
         }
         "whisper_message_send" => {
             whisper_message_send(send_uid, msg);
+        }
+        "group_message_send" => {
+            group_message_send(send_uid, msg);
         }
         _ => {
         }
