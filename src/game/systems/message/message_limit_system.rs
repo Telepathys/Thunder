@@ -56,7 +56,6 @@ pub fn message_limit_check (
     }
 
     let my_message_history_count = get_message_history_count(&send_id).unwrap();
-    info!("my_message_history_count {}",my_message_history_count);
     if my_message_history_count >= message_limit_count as isize {
         add_message_limit_list(&send_id).unwrap();
         system_message_send(send_id, format!("Message transmission is restricted for {} seconds due to indiscriminate messages.", message_ban_second));
