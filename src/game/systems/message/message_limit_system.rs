@@ -1,6 +1,5 @@
 use std::{fs};
 use chrono::{FixedOffset, Utc, DateTime};
-use log::info;
 use crate::database::redis::message::message_hash::{add_message_history, get_message_history, exists_message_limit_list, get_message_limit_time, delete_message_limit_list, delete_message_history, add_message_limit_list, get_message_history_count};
 use crate::game::systems::message::system_message_system::system_message_send;
 use crate::game::components::config::config_component::Config;
