@@ -20,6 +20,7 @@ pub mod router {
     pub mod service {
         pub mod message_router;
         pub mod group_router;
+        pub mod match_router;
     }
 }
 mod grpc {
@@ -50,12 +51,16 @@ pub mod database {
         pub mod message {
             pub mod message_hash;
         }
+        pub mod matchs {
+            pub mod match_hash;
+        }
     }
 }
 pub mod utils {
     pub mod sha;
     pub mod jwt;
 }
+// Game Module
 pub mod game {
     pub mod components {
         pub mod user {
@@ -90,6 +95,10 @@ pub mod game {
             pub mod group_join_system;
             pub mod group_leave_system;
         }
+        pub mod matchs {
+            pub mod random_match_wait_system;
+            pub mod random_match_cancel_system;
+        }
     }
     pub mod memory {
         pub mod user {
@@ -98,6 +107,12 @@ pub mod game {
     }
     pub mod enums {
         pub mod core_enum;
+    }
+    pub mod scheduler {
+        pub mod scheduler;
+        pub mod matchs {
+            pub mod random_match_scheduler;
+        }
     }
 }
 use router::server::http_router::{
@@ -111,6 +126,7 @@ use socket::{
 use grpc::thunder::test::hello_service::{
     HelloService, thunder,
 };
+use crate::game::scheduler::scheduler::scheduler_core;
 
 #[tokio::main]
 async fn main() -> Result<(), IoError> {
@@ -149,7 +165,6 @@ async fn main() -> Result<(), IoError> {
         }
     });
 
-
     // gRPC server start
     let hello_service = HelloService::default();
     let addr = "0.0.0.0:7779".parse().unwrap();
@@ -170,6 +185,13 @@ async fn main() -> Result<(), IoError> {
         info!("redis channel subscribe start");
         redis_subscribe();
     });
+
+    // scheduler system
+    tokio::spawn(async move {
+        info!("scheduler system start");
+        scheduler_core().await
+    });
+
 
     tokio::signal::ctrl_c().await.unwrap();
 

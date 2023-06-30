@@ -9,6 +9,9 @@ use crate::{router::service::{
     group_router:: {
         group_router
     },
+    match_router:: {
+        match_router
+    }
 }, game::systems::message::message_limit_system::message_limit_check};
 
 pub fn socket_router(uid: String, msg: Message) {
@@ -28,6 +31,10 @@ pub fn socket_router(uid: String, msg: Message) {
             "group_join" | 
             "group_leave" => {
                 group_router(uid,router.as_str(), msg.clone().into());
+            }
+            "random_match_wait" | 
+            "random_match_cancel" => {
+                match_router(uid,router.as_str(), msg.clone().into());
             }
             _ => {
                 info!("default : {}", data.0);
