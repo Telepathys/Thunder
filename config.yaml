@@ -1,0 +1,3 @@
+message_limit_second: 3 # 메세지 제한 시간 (5초안에 몇번)
+message_limit_count: 5 # 메세지 제안 개수 (5초안에 5번 이상 채팅하면 밴)
+message_ban_second: 30 # 메세지 밴 시간

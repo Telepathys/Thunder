@@ -47,6 +47,9 @@ pub mod database {
         pub mod group {
             pub mod group_hash;
         }
+        pub mod message {
+            pub mod message_hash;
+        }
     }
 }
 pub mod utils {
@@ -71,6 +74,9 @@ pub mod game {
             pub mod group_join_component;
             pub mod group_leave_component;
         }
+        pub mod config {
+            pub mod config_component;
+        }
     }
     pub mod systems {
         pub mod message {
@@ -78,6 +84,7 @@ pub mod game {
             pub mod server_message_system;
             pub mod whisper_message_system;
             pub mod group_message_system;
+            pub mod message_limit_system;
         }
         pub mod group {
             pub mod group_join_system;
