@@ -64,22 +64,4 @@ pub fn message_limit_check (
 
     add_message_history(&send_id).unwrap();
     true
-    
-    // let system_message_ecs_engine = Arc::new(MessageLimitEcsEngine::new());
-
-    // let sockets = get_user_socket();
-    // let user_sockets = sockets.iter().filter(|user_sockets| user_sockets.0 == &target_uid).map(|(_, user_socket)| user_socket);
-
-    // let system_message_send_to = SystemMessageSendTo {
-    //     message_type: MessageType::System,
-    //     message: msg,
-    // };
-
-    // for this_socket in user_sockets {
-    //     system_message_ecs_engine.add_user(this_socket.id.clone(), this_socket.tx.clone());
-    // }
-
-    // system_message_ecs_engine.broadcast_message(Message::Text(serde_json::to_string(&system_message_send_to).unwrap()));
-
-    // system_message_ecs_engine.clear();
 }
