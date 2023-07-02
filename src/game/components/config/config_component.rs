@@ -1,4 +1,3 @@
-use prost::encoding::double;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]

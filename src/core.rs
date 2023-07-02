@@ -87,6 +87,4 @@ pub async fn server_start() {
 
 
     tokio::signal::ctrl_c().await.unwrap();
-
-    // Ok(());
 }

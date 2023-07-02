@@ -23,7 +23,7 @@ pub async fn random_match_scheduler(shared_mutex: AsyncMutex<()>) {
             let _lock = shared_mutex.lock().await;
             let random_match_wait_list = get_random_match_wait_list().unwrap();
 
-            let match_make_count = 100 as f64 / match_require_user_count as f64 * match_make_count_control;
+            let match_make_count = random_match_wait_list.len() as f64 / match_require_user_count as f64 * match_make_count_control;
             info!("match_make_count : {}", match_make_count.ceil().to_string());
 
             for _ in 0..match_make_count.ceil() as usize {

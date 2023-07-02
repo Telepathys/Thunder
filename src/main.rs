@@ -2,7 +2,6 @@ use std::{
     io::Error as IoError,
 };
 
-// Custom use
 pub mod core;
 pub mod socket;
 pub mod router {
@@ -113,6 +112,5 @@ use crate::core::server_start;
 #[tokio::main]
 async fn main() -> Result<(), IoError> {
     server_start().await;
-
     Ok(())
 }
