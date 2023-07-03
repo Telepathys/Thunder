@@ -19,26 +19,26 @@ pub async fn random_match_scheduler(shared_mutex: AsyncMutex<()>) {
     let schedule_duration = Duration::from_secs(match_check_time.into());
 
     loop {
-        {
-            let _lock = shared_mutex.lock().await;
-            let random_match_wait_list = get_random_match_wait_list().unwrap();
+            {
+                let _lock = shared_mutex.lock().await;
+                let random_match_wait_list = get_random_match_wait_list().unwrap();
 
-            let match_make_count = random_match_wait_list.len() as f64 / match_require_user_count as f64 * match_make_count_control;
-            info!("match_make_count : {}", match_make_count.ceil().to_string());
+                let match_make_count = random_match_wait_list.len() as f64 / match_require_user_count as f64 * match_make_count_control;
+                info!("match_make_count : {}", match_make_count.ceil().to_string());
 
-            for _ in 0..match_make_count.ceil() as usize {
-                info!("zzzzzz");
+                if random_match_wait_list.len() >= 2 {
+                    for _ in 0..match_make_count.ceil() as usize {
+                        let mut rng = rand::thread_rng();
+                        let random_pick_user_list = random_match_wait_list
+                            .choose_multiple(&mut rng, match_require_user_count as usize)
+                            .collect::<Vec<_>>();
+                        for random_pick_user in random_pick_user_list {
+                            info!("random_pick_user : {}", random_pick_user);
+                            delete_random_match_wait_list(random_pick_user).unwrap();
+                        }
+                    }
+                }
             }
-
-
-            // let mut rng = rand::thread_rng();
-            // let random_pick_user_list = random_match_wait_list
-            //     .choose_multiple(&mut rng, 2)
-            //     .collect::<Vec<_>>();
-            // for random_pick_user in random_pick_user_list {
-            //     delete_random_match_wait_list(random_pick_user).unwrap();
-            // }
-        }
 
         sleep(schedule_duration).await;
     }
