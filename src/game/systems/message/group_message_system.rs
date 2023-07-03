@@ -45,7 +45,7 @@ pub fn group_message_send(
     msg : Message,
 ) {
     if !check_my_group(&send_uid).unwrap() {
-        system_message_send(send_uid, format!("you are not in group."));
+        system_message_send(&send_uid, format!("you are not in group."));
         return;
     }
 

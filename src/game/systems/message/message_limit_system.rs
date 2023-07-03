@@ -5,7 +5,7 @@ use crate::game::systems::message::system_message_system::system_message_send;
 use crate::game::components::config::config_component::Config;
 
 pub fn message_limit_check (
-    send_id: String,
+    send_id: &String,
 ) -> bool {
     let contents = fs::read_to_string("Config.yaml").expect("Failed to read file");
     let config: Config = serde_yaml::from_str(&contents).expect("Failed to parse YAML");

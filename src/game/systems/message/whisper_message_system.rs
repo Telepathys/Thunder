@@ -53,7 +53,7 @@ pub fn whisper_message_send(
         tokio::spawn(async move {
             let target_user_info = find_by_uuid(&uid).await;
             let arget_username = target_user_info.get("name").unwrap().to_string().trim_matches('"').to_string();
-            system_message_send(send_uid, format!("{} is not online.", arget_username));
+            system_message_send(&send_uid, format!("{} is not online.", arget_username));
         });
         return;
     }

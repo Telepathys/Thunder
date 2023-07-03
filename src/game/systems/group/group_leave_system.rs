@@ -84,6 +84,6 @@ pub fn group_leave(
     
         group_leave_ecs_engine.clear();
     } else {
-        system_message_send(send_uid, format!("you are not in group."))
+        system_message_send(&send_uid, format!("you are not in group."))
     }
 }

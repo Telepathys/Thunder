@@ -24,17 +24,17 @@ pub fn socket_router(uid: String, msg: Message) {
             "whisper_message_send" | 
             "group_message_send"
             => {
-                if message_limit_check(uid.clone()) {
-                    message_router(uid,router.as_str(), msg.clone().into());
+                if message_limit_check(&uid) {
+                    message_router(uid,router.as_str(), msg.into());
                 }
             }
             "group_join" | 
             "group_leave" => {
-                group_router(uid,router.as_str(), msg.clone().into());
+                group_router(uid,router.as_str(), msg.into());
             }
             "random_match_wait" | 
             "random_match_cancel" => {
-                match_router(uid,router.as_str(), msg.clone().into());
+                match_router(uid,router.as_str(), msg.into());
             }
             _ => {
                 info!("default : {}", data.0);

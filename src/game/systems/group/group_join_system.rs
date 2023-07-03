@@ -58,7 +58,7 @@ pub fn group_join(
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
 
     if check_my_group(&send_uid).unwrap() && get_my_group_key(&send_uid).unwrap() == group_key {
-        system_message_send(send_uid, format!("you are aleady join this group."));
+        system_message_send(&send_uid, format!("you are aleady join this group."));
         return;
     } else if check_my_group(&send_uid).unwrap() && get_my_group_key(&send_uid).unwrap() != group_key {
         group_leave(send_uid.clone(),None);
