@@ -71,6 +71,10 @@ pub mod game {
             pub mod group_join_component;
             pub mod group_leave_component;
         }
+        pub mod matchs {
+            pub mod random_match_wait_join_component;
+            pub mod random_match_join_component;
+        }
         pub mod config {
             pub mod config_component;
         }
@@ -90,9 +94,14 @@ pub mod game {
         pub mod matchs {
             pub mod random_match_wait_system;
             pub mod random_match_cancel_system;
+            pub mod random_match_wait_join_system;
+            pub mod random_match_join_system;
         }
     }
     pub mod memory {
+        pub mod config {
+            pub mod config_memory;
+        }
         pub mod user {
             pub mod user_memory;
         }
@@ -107,10 +116,14 @@ pub mod game {
         }
     }
 }
+use game::memory::config::config_memory::config_init;
+
 use crate::core::server_start;
 
 #[tokio::main]
 async fn main() -> Result<(), IoError> {
-    server_start().await;
+    if config_init().await {
+        server_start().await;
+    }
     Ok(())
 }

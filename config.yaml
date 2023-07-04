@@ -1,7 +1,7 @@
 message_limit_second: 3 # 메세지 제한 시간 (5초안에 몇번)
 message_limit_count: 5 # 메세지 제안 개수 (5초안에 5번 이상 채팅하면 밴)
 message_ban_second: 30 # 메세지 밴 시간
-match_check_time: 10 # 매칭 대기자 체크 시간 (매칭 대기자 있는지 몇초 마다 확인)
+match_check_time: 1 # 매칭 대기자 체크 시간 (매칭 대기자 있는지 몇초 마다 확인)
 match_require_user_count: 2 # 매칭에 필요한 유저 수
 match_make_count_control: 0.1 # 매칭 컨트롤 시간
 match_join_limit_time: 30 # 매칭 참가 제한 시간

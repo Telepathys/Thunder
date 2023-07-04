@@ -1,14 +1,12 @@
-use std::{fs};
 use chrono::{FixedOffset, Utc, DateTime};
 use crate::database::redis::message::message_hash::{add_message_history, get_message_history, exists_message_limit_list, get_message_limit_time, delete_message_limit_list, delete_message_history, add_message_limit_list, get_message_history_count};
+use crate::game::memory::config::config_memory::get_config;
 use crate::game::systems::message::system_message_system::system_message_send;
-use crate::game::components::config::config_component::Config;
 
 pub fn message_limit_check (
     send_id: &String,
 ) -> bool {
-    let contents = fs::read_to_string("Config.yaml").expect("Failed to read file");
-    let config: Config = serde_yaml::from_str(&contents).expect("Failed to parse YAML");
+    let config = get_config();
     let message_limit_second = config.message_limit_second.unwrap_or(5);
     let message_limit_count = config.message_limit_count.unwrap_or(5);
     let message_ban_second = config.message_ban_second.unwrap_or(30);

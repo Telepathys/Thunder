@@ -7,5 +7,7 @@ pub enum MessageType {
     WhisperMessage,
     GroupJoin,
     GroupLeave,
-    GroupMessage
+    GroupMessage,
+    RamdomMatchWaitJoin,
+    RandomMatchJoin,
 }

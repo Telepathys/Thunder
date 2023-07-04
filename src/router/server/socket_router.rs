@@ -33,7 +33,8 @@ pub fn socket_router(uid: String, msg: Message) {
                 group_router(uid,router.as_str(), msg.into());
             }
             "random_match_wait" | 
-            "random_match_cancel" => {
+            "random_match_cancel"|
+            "random_match_join" => {
                 match_router(uid,router.as_str(), msg.into());
             }
             _ => {
