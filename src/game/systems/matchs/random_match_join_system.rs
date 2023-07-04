@@ -3,7 +3,19 @@ use futures_channel::mpsc::UnboundedSender;
 use tokio_tungstenite::tungstenite::Message;
 use std::sync::{Arc,Mutex};
 use crate::{
-    game::{systems::message::system_message_system::system_message_send, components::matchs::random_match_join_component::{RandomMatchJoin, RandomMatchJoinSendTo}, memory::user::user_memory::get_user_socket, enums::core_enum::MessageType}, database::redis::{matchs::match_hash::{check_match_exist, add_match_join_user_list}, socket::socket_hash::get_my_info},
+    game::{
+        systems::message::system_message_system::system_message_send, 
+        components::matchs::random_match_join_component::{
+            RandomMatchJoin, RandomMatchJoinSendTo}, 
+            memory::user::user_memory::get_user_socket, 
+            enums::core_enum::MessageType}, 
+            database::redis::{
+                matchs::match_hash::{
+                    check_match_exist, 
+                    add_match_join_user_list, 
+                    check_my_match_exist
+                }, 
+                socket::socket_hash::get_my_info},
 };
 
 struct MatchJoinMessageEcsEngine {
@@ -44,6 +56,11 @@ pub fn random_match_join(
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
     if !check_match_exist(&match_id).unwrap() {
         system_message_send(&send_uid, format!("The match does not exist."));
+        return;
+    }
+
+    if check_my_match_exist(&send_uid).unwrap() {
+        system_message_send(&send_uid, format!("You are already in the match."));
         return;
     }
 
