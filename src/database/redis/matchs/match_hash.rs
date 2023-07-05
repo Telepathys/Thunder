@@ -96,3 +96,20 @@ pub fn add_match_list(match_id: &String) -> redis::RedisResult<Vec<String>> {
     con.sadd("match_list", match_id)?;
     con.smembers("match_list")
 }
+
+pub fn add_match_state(match_id: &String, accept: bool) -> redis::RedisResult<()> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.lpush(match_id.to_owned()+"#state", accept)?;
+    Ok(())
+}
+
+pub fn get_match_state(match_id: &String) -> redis::RedisResult<Vec<bool>> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.lrange(match_id.to_owned()+"#state", 0 , -1)
+}
+
+pub fn delete_match_state(match_id: &String) -> redis::RedisResult<()> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.del(match_id.to_owned()+"#state")?;
+    Ok(())
+}

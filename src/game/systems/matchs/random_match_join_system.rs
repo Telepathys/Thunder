@@ -8,14 +8,17 @@ use crate::{
         components::matchs::random_match_join_component::{
             RandomMatchJoin, RandomMatchJoinSendTo}, 
             memory::user::user_memory::get_user_socket, 
-            enums::core_enum::MessageType}, 
-            database::redis::{
-                matchs::match_hash::{
-                    check_match_exist, 
-                    add_match_join_user_list, 
-                    check_my_match_exist
-                }, 
-                socket::socket_hash::get_my_info},
+            enums::core_enum::MessageType
+    },
+    database::redis::{
+        matchs::match_hash::{
+            check_match_exist, 
+            add_match_join_user_list, 
+            check_my_match_exist, 
+            add_match_state,
+        }, 
+        socket::socket_hash::get_my_info
+    },
 };
 
 struct MatchJoinMessageEcsEngine {
@@ -52,6 +55,7 @@ pub fn random_match_join(
     let msg = msg.to_text().unwrap();
     let data: RandomMatchJoin = serde_json::from_str(msg).unwrap();
     let match_id = data.random_match_join.match_id;
+    let accept =  data.random_match_join.accept;
     let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
     if !check_match_exist(&match_id).unwrap() {
@@ -64,7 +68,11 @@ pub fn random_match_join(
         return;
     }
 
-    let match_join_list = add_match_join_user_list(&match_id, &send_uid).unwrap();
+    let mut match_join_list  = Vec::new();
+    add_match_state(&match_id,accept).unwrap();
+    if accept {
+        match_join_list = add_match_join_user_list(&match_id, &send_uid).unwrap();
+    }
 
     let sockets = get_user_socket();
     let user_sockets = sockets.iter().filter(|user_sockets| match_join_list.contains(user_sockets.0)).map(|(_, user_socket)| user_socket);

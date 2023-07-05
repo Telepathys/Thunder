@@ -12,6 +12,7 @@ pub struct RandomMatchJoin {
 #[derive(Debug, Deserialize)]
 pub struct RandomMatchJoinData {
     pub match_id: String,
+    pub accept: bool,
 }
 
 
