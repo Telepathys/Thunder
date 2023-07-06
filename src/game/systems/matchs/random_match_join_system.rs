@@ -15,7 +15,7 @@ use crate::{
             check_match_exist, 
             add_match_join_user_list, 
             check_my_match_exist, 
-            add_match_state,
+            add_match_response,
         }, 
         socket::socket_hash::get_my_info
     },
@@ -69,7 +69,7 @@ pub fn random_match_join(
     }
 
     let mut match_join_list  = Vec::new();
-    add_match_state(&match_id,accept).unwrap();
+    add_match_response(&match_id,&send_uid).unwrap();
     if accept {
         match_join_list = add_match_join_user_list(&match_id, &send_uid).unwrap();
     }

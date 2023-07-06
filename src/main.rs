@@ -74,6 +74,8 @@ pub mod game {
         pub mod matchs {
             pub mod random_match_wait_join_component;
             pub mod random_match_join_component;
+            pub mod random_match_wait_success_componet;
+            pub mod random_match_complete_component;
         }
         pub mod config {
             pub mod config_component;
@@ -96,6 +98,7 @@ pub mod game {
             pub mod random_match_cancel_system;
             pub mod random_match_wait_join_system;
             pub mod random_match_join_system;
+            pub mod random_match_complete_system;
         }
     }
     pub mod memory {

@@ -34,7 +34,9 @@ pub fn socket_router(uid: String, msg: Message) {
             }
             "random_match_wait" | 
             "random_match_cancel"|
-            "random_match_join" => {
+            "random_match_join" |
+            "random_match_wait_success" |
+            "random_match_complete" => {
                 match_router(uid,router.as_str(), msg.into());
             }
             _ => {

@@ -3,6 +3,7 @@ use futures_channel::mpsc::UnboundedSender;
 use tokio_tungstenite::tungstenite::Message;
 use crate::database::redis::matchs::match_hash::{add_match_join_list, add_match_wait_join_user_list, delete_random_match_wait_list};
 use crate::game::components::matchs::random_match_wait_join_component::RandomMatchWaitJoinSendTo;
+use crate::game::components::matchs::random_match_wait_success_componet::RandomMatchWaitSuccess;
 use crate::game::enums::core_enum::MessageType;
 use crate::game::memory::user::user_memory::get_user_socket;
 use std::sync::{Arc,Mutex};
@@ -35,18 +36,21 @@ impl MatchWaitJoinMessageEcsEngine {
 }
 
 pub fn random_match_wait_join_start(
-    random_match_user_list: Vec<String>,
-    match_id: &String,
+    msg: Message,
 ) {
+    let msg = msg.to_text().unwrap();
+    let data: RandomMatchWaitSuccess = serde_json::from_str(msg).unwrap();
+    let match_id = data.random_match_wait_success.match_id;
+    let random_match_user_list = data.random_match_wait_success.match_success_user_list;
     let match_wait_join_message_ecs_engine = Arc::new(MatchWaitJoinMessageEcsEngine::new());
 
     add_match_join_list(&match_id).unwrap();
     for random_match_user in &random_match_user_list {
-        add_match_wait_join_user_list(match_id, random_match_user).unwrap();
+        add_match_wait_join_user_list(&match_id, random_match_user).unwrap();
         delete_random_match_wait_list(random_match_user).unwrap();
     }
 
-    let group_message_send_to = RandomMatchWaitJoinSendTo {
+    let random_match_wait_join_send_to = RandomMatchWaitJoinSendTo {
         message_type: MessageType::RamdomMatchWaitJoin,
         match_id: match_id.to_string(),
     };
@@ -58,7 +62,7 @@ pub fn random_match_wait_join_start(
         match_wait_join_message_ecs_engine.add_user(this_socket.id.clone(), this_socket.tx.clone());
     }
 
-    match_wait_join_message_ecs_engine.broadcast_message(Message::Text(serde_json::to_string(&group_message_send_to).unwrap()));
+    match_wait_join_message_ecs_engine.broadcast_message(Message::Text(serde_json::to_string(&random_match_wait_join_send_to).unwrap()));
 
     match_wait_join_message_ecs_engine.clear();
 }
