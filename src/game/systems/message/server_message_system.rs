@@ -45,7 +45,7 @@ pub fn server_message_send(
     let server_message_ecs_engine = Arc::new(ServerMessageEcsEngine::new());
     let msg = msg.to_text().unwrap();
     let data: ServerMessage = serde_json::from_str(msg).unwrap();
-    let message = data.server_message_send.message.clone();
+    let message = data.server_message_send.message;
     let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
 
@@ -53,7 +53,7 @@ pub fn server_message_send(
         message_type: MessageType::ServerMessage,
         uid: send_uid.clone(),
         username: username,
-        message: message.clone(),
+        message: message,
     };
 
     let sockets = get_user_socket();

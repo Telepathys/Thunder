@@ -48,14 +48,14 @@ pub fn random_match_message_send(
     let random_match_message_ecs_engine = Arc::new(RandomMatchMessageEcsEngine::new());
     let msg = msg.to_text().unwrap();
     let data: RandomMatchMessage = serde_json::from_str(msg).unwrap();
-    let message = data.random_match_message_send.message.clone();
+    let message = data.random_match_message_send.message;
     let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
     let random_match_message_send_to = RandomMatchMessageSendTo {
         message_type: MessageType::RandomMatchMessage,
         uid: send_uid.clone(),
         username: username,
-        message: message.clone(),
+        message: message,
     };
 
     let match_id = get_my_match(&send_uid).unwrap();

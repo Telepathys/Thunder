@@ -54,7 +54,7 @@ pub fn group_message_send(
     let msg = msg.to_text().unwrap();
     let data: GroupMessage = serde_json::from_str(msg).unwrap();
     
-    let message = data.group_message_send.message.clone();
+    let message = data.group_message_send.message;
     let sender_info = get_my_info(&send_uid).unwrap();
 
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
@@ -62,7 +62,7 @@ pub fn group_message_send(
         message_type: MessageType::GroupMessage,
         uid: send_uid.clone(),
         username: username,
-        message: message.clone(),
+        message: message,
     };
 
     let group_key = get_my_group_key(&send_uid).unwrap();

@@ -47,7 +47,7 @@ pub fn whisper_message_send(
     let whisper_message_ecs_engine = Arc::new(WhisperMessageEcsEngine::new());
     let msg = msg.to_text().unwrap();
     let data: WhisperMessage = serde_json::from_str(msg).unwrap();
-    let uid = data.whisper_message_send.uid.clone();
+    let uid = data.whisper_message_send.uid;
 
     if !check_online_user(&uid).unwrap() {
         tokio::spawn(async move {
@@ -58,14 +58,14 @@ pub fn whisper_message_send(
         return;
     }
 
-    let message = data.whisper_message_send.message.clone();
+    let message = data.whisper_message_send.message;
     let sender_info = get_my_info(&send_uid).unwrap();
     let username = sender_info.iter().find(|(key, _)| *key == "name").map(|(_, value)| value.to_owned()).unwrap();
     let whisper_message_send_to = WhisperMessageSendTo {
         message_type: MessageType::WhisperMessage,
         uid: send_uid.clone(),
         username: username,
-        message: message.clone(),
+        message: message,
     };
     let sockets = get_user_socket();
     let user_sockets = sockets.iter().filter(|user_sockets| user_sockets.0 == &uid).map(|(_, user_socket)| user_socket);
