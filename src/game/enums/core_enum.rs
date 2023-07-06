@@ -10,4 +10,5 @@ pub enum MessageType {
     GroupMessage,
     RamdomMatchWaitJoin,
     RandomMatchJoin,
+    RandomMatchMessage,
 }

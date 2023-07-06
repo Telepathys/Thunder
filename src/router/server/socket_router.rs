@@ -22,21 +22,25 @@ pub fn socket_router(uid: String, msg: Message) {
         match router.as_str() {
             "server_message_send" | 
             "whisper_message_send" | 
-            "group_message_send"
+            "group_message_send" |
+            "random_match_message_send"
             => {
                 if message_limit_check(&uid) {
                     message_router(uid,router.as_str(), msg.into());
                 }
             }
             "group_join" | 
-            "group_leave" => {
+            "group_leave"
+            => {
                 group_router(uid,router.as_str(), msg.into());
             }
             "random_match_wait" | 
             "random_match_cancel"|
             "random_match_join" |
             "random_match_wait_success" |
-            "random_match_complete" => {
+            "random_match_complete"  |
+            "random_match_leave"
+            => {
                 match_router(uid,router.as_str(), msg.into());
             }
             _ => {

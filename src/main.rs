@@ -63,6 +63,7 @@ pub mod game {
             pub mod server_message_component;
             pub mod whisper_message_component;
             pub mod group_message_component;
+            pub mod random_match_message_component;
         }
         pub mod redis {
             pub mod redis_component;
@@ -88,6 +89,7 @@ pub mod game {
             pub mod whisper_message_system;
             pub mod group_message_system;
             pub mod message_limit_system;
+            pub mod random_match_message_system;
         }
         pub mod group {
             pub mod group_join_system;

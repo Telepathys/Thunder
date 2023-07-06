@@ -80,6 +80,11 @@ pub fn add_match(match_id: &String, uid: &String) -> redis::RedisResult<Vec<Stri
     con.smembers(match_id)
 }
 
+pub fn get_match_members(match_id: &String) -> redis::RedisResult<Vec<String>> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.smembers(match_id)
+}
+
 pub fn add_my_match(match_id: &String, uid: &String) -> redis::RedisResult<String> {
     let mut con: redis::Connection = connect_redis()?;
     con.set(uid.to_owned()+"#match_id", match_id)?;
@@ -95,6 +100,11 @@ pub fn add_match_list(match_id: &String) -> redis::RedisResult<Vec<String>> {
     let mut con: redis::Connection = connect_redis()?;
     con.sadd("match_list", match_id)?;
     con.smembers("match_list")
+}
+
+pub fn get_my_match(uid: &String) -> redis::RedisResult<String> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.get(uid.to_owned()+"#match_id")
 }
 
 pub fn add_match_response(match_id: &String, uid: &String) -> redis::RedisResult<Vec<String>> {
