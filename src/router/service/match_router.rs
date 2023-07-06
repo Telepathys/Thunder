@@ -6,7 +6,7 @@ use crate::game::systems::matchs::{
     random_match_join_system::random_match_join, 
     random_match_wait_join_system::random_match_wait_join_start, 
     random_match_complete_system::random_match_complete, 
-    random_match_leave_system::random_match_leave
+    random_match_leave_system::random_match_leave, random_match_custom_data_send_system::random_match_custom_data_send
 };
 
 pub fn match_router(send_uid: String, service: &str, msg: Message) {
@@ -28,6 +28,9 @@ pub fn match_router(send_uid: String, service: &str, msg: Message) {
         }
         "random_match_leave" => {
             random_match_leave(&send_uid);
+        }
+        "random_match_custom_data_send" => {
+            random_match_custom_data_send(send_uid, msg);
         }
         _ => {
         }

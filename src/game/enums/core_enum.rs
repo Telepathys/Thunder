@@ -12,4 +12,10 @@ pub enum MessageType {
     RamdomMatchWaitJoin,
     RandomMatchJoin,
     RandomMatchLeave,
+    RandomMatchCustomData,
+}
+
+#[derive(Deserialize, Serialize)]
+pub enum CustomDataType {
+    CommonData,
 }
