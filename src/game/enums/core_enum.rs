@@ -5,10 +5,11 @@ pub enum MessageType {
     System,
     ServerMessage,
     WhisperMessage,
+    RandomMatchMessage,
     GroupJoin,
     GroupLeave,
     GroupMessage,
     RamdomMatchWaitJoin,
     RandomMatchJoin,
-    RandomMatchMessage,
+    RandomMatchLeave,
 }

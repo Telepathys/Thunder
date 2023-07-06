@@ -51,7 +51,7 @@ pub async fn random_match_scheduler(shared_mutex: AsyncMutex<()>,config: Config)
                 let random_match_wait_list = get_random_match_wait_list().unwrap();
 
                 let match_make_count = random_match_wait_list.len() as f64 / match_require_user_count as f64 * match_make_count_control;
-                if random_match_wait_list.len() >= 2 {
+                if random_match_wait_list.len() >= match_require_user_count as usize{
                     for _ in 0..match_make_count.ceil() as usize {
                         let mut rng = rand::thread_rng();
                         let random_pick_user_list = random_match_wait_list

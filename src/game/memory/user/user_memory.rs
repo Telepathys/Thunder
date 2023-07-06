@@ -12,6 +12,7 @@ use crate::database::redis::socket::socket_hash::{
     remove_connecting_uuid_to_redis,
 };
 use crate::game::systems::group::group_leave_system::group_leave;
+use crate::game::systems::matchs::random_match_leave_system::random_match_leave;
 
 lazy_static! {
     static ref USER_SOCKETS: Mutex<HashMap<String, UserSocket>> = Mutex::new(HashMap::new());
@@ -38,8 +39,11 @@ pub fn add_user_socket(uuid: String, user_socket: UserSocket) {
 pub fn init_for_disconnect_user(uid: String) {
     USER_SOCKETS.lock().unwrap().remove(&uid.clone());
     tokio::spawn(async move {
+        // pub sub 구현 필요 ****
         // group_list 제거
-        group_leave(uid.clone(),None);
+        group_leave(&uid,None);
+        // random_match 제거
+        random_match_leave(&uid);
         // socket_list 제거
         if let Err(err) = remove_connecting_uuid_to_redis(&uid).await {
             error!("{}", err);

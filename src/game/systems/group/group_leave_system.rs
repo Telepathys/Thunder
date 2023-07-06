@@ -42,7 +42,7 @@ impl GroupLeaveEcsEngine {
 }
 
 pub fn group_leave(
-    send_uid: String,
+    send_uid: &String,
     msg : Option<Message>,
 ) {
     let group_leave_ecs_engine = Arc::new(GroupLeaveEcsEngine::new());
@@ -65,7 +65,7 @@ pub fn group_leave(
         }
         
         let sockets = get_user_socket();
-        let user_sockets = sockets.iter().filter(|user_sockets| group_list.contains(user_sockets.0) || user_sockets.0 == &send_uid).map(|(_, user_socket)| user_socket);
+        let user_sockets = sockets.iter().filter(|user_sockets| group_list.contains(user_sockets.0) || user_sockets.0 == send_uid).map(|(_, user_socket)| user_socket);
     
         // 다른 유저들 소켓 추가
         for this_socket in user_sockets {

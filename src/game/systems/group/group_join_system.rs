@@ -61,7 +61,7 @@ pub fn group_join(
         system_message_send(&send_uid, format!("you are aleady join this group."));
         return;
     } else if check_my_group(&send_uid).unwrap() && get_my_group_key(&send_uid).unwrap() != group_key {
-        group_leave(send_uid.clone(),None);
+        group_leave(&send_uid.clone(),None);
     }
 
     if !check_group_exist(&group_key).unwrap() {

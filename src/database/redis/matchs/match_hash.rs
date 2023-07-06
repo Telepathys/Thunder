@@ -85,6 +85,12 @@ pub fn get_match_members(match_id: &String) -> redis::RedisResult<Vec<String>> {
     con.smembers(match_id)
 }
 
+pub fn delete_match_member(match_id: &String, uid: &String) -> redis::RedisResult<Vec<String>> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.srem(match_id, uid)?;
+    con.smembers(match_id)
+}
+
 pub fn add_my_match(match_id: &String, uid: &String) -> redis::RedisResult<String> {
     let mut con: redis::Connection = connect_redis()?;
     con.set(uid.to_owned()+"#match_id", match_id)?;
@@ -96,15 +102,21 @@ pub fn check_my_match_exist(uid: &String) -> redis::RedisResult<bool> {
     con.exists(uid.to_owned()+"#match_id")
 }
 
+pub fn get_my_match(uid: &String) -> redis::RedisResult<String> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.get(uid.to_owned()+"#match_id")
+}
+
+pub fn delete_my_match(uid: &String) -> redis::RedisResult<()> {
+    let mut con: redis::Connection = connect_redis()?;
+    con.del(uid.to_owned()+"#match_id")?;
+    Ok(())
+}
+
 pub fn add_match_list(match_id: &String) -> redis::RedisResult<Vec<String>> {
     let mut con: redis::Connection = connect_redis()?;
     con.sadd("match_list", match_id)?;
     con.smembers("match_list")
-}
-
-pub fn get_my_match(uid: &String) -> redis::RedisResult<String> {
-    let mut con: redis::Connection = connect_redis()?;
-    con.get(uid.to_owned()+"#match_id")
 }
 
 pub fn add_match_response(match_id: &String, uid: &String) -> redis::RedisResult<Vec<String>> {

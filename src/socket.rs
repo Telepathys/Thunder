@@ -90,7 +90,7 @@ pub async fn handle_connection(stream: TcpStream, socket: SocketAddr) {
             }
         }
     } else {
-        println!("토큰이 제공되지 않았습니다.");
+        println!("no token");
     }
 }
 

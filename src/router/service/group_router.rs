@@ -14,7 +14,7 @@ pub fn group_router(send_uid: String, service: &str, msg: Message) {
             group_join(send_uid, msg);
         }
         "group_leave" => {
-            group_leave(send_uid, Some(msg));
+            group_leave(&send_uid, Some(msg));
         }
         _ => {
         }
