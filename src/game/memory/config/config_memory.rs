@@ -16,7 +16,7 @@ lazy_static! {
     });
 }
 
-pub async fn config_init() -> bool {
+pub async fn config_init() {
     let contents = fs::read_to_string("Config.yaml").expect("Failed to read file");
     let config: Config = serde_yaml::from_str(&contents).expect("Failed to parse YAML");
     CONFIG.lock().unwrap().message_limit_second = config.message_limit_second;
@@ -26,7 +26,6 @@ pub async fn config_init() -> bool {
     CONFIG.lock().unwrap().match_require_user_count = config.match_require_user_count;
     CONFIG.lock().unwrap().match_make_count_control = config.match_make_count_control;
     CONFIG.lock().unwrap().match_join_limit_time = config.match_join_limit_time;
-    return true;
 }
 
 pub fn get_config() -> MutexGuard<'static, Config> {

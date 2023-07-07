@@ -131,8 +131,7 @@ use crate::core::server_start;
 
 #[tokio::main]
 async fn main() -> Result<(), IoError> {
-    if config_init().await {
-        server_start().await;
-    }
+    config_init().await;
+    server_start().await;
     Ok(())
 }
